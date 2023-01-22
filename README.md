@@ -13,3 +13,5 @@ AbFixedWings前卫地支持了树莓派船新的LibCamera库。
 天空端：https://github.com/yangchaohong/AbFixedWingsSky
 
 飞控端：https://github.com/yangchaohong/AbFixedWingsArduino
+
+构建：使用Qt 5.15构建
