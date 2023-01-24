@@ -6,7 +6,7 @@ using namespace std;
 //QGamepad *m_gamepad;
 
 float pitchNeed,rollNeed,Yaw;
-int imageRotate,imageY;
+int imageRotate,imageY,thro;
 QString skyip;
 int skyport,tuchuanport;
 joystick *joy;
@@ -84,6 +84,15 @@ void MainWindow::move()
 {
     pitchNeed=joy->pitchNeed;
     rollNeed=joy->rollNeed;
+    if(joy->xbox->p.buttonY)
+        thro++;
+    if(joy->xbox->p.buttonX)
+        thro--;
+    if(thro>100)
+        thro=100;
+    if(thro<0)
+        thro=0;
+    ui->verticalSlider->setValue(thro);
     ui->pitch->setText(QString::number(pitchNeed));
     ui->roll->setText(QString::number(rollNeed));
     if(connected)
@@ -101,7 +110,7 @@ void MainWindow::move()
             ui->label_5->setText("连接成功！");
             qDebug()<<"连接成功！"<<Qt::endl;
         }
-        qDebug()<<arr;
+        //qDebug()<<arr;
         if(arr[0]=='R')
         {
             string tmp=arr.toStdString();
@@ -117,6 +126,8 @@ void MainWindow::move()
         QByteArray a='P'+QString::number(pitchNeed).toUtf8()+'\n';
         UdpServer->writeDatagram(a,QHostAddress( skyip ),skyport);
         a='R'+QString::number(rollNeed).toUtf8()+'\n';
+        UdpServer->writeDatagram(a,QHostAddress( skyip ),skyport);
+        a='T'+QString::number(thro).toUtf8()+'\n';
         UdpServer->writeDatagram(a,QHostAddress( skyip ),skyport);
     }
 }

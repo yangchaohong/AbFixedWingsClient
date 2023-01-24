@@ -16,27 +16,28 @@ void XboxThread::run() {
         return;
     }
     hid_set_nonblocking(handle, 1);
+    p.SLValue=p.SRValue=p.buttonA=p.buttonB=p.buttonX=p.buttonY=p.LSXValue=p.LSYValue=p.RSXValue=p.RSYValue=p.buttonLB=p.buttonLS=p.buttonRB=p.buttonRS=p.buttonBack=p.buttonStart=0;
     while (isRunning) {
         //qDebug() << "xbox360 gamepad thread runing!";
         res = hid_read(handle, buf, 64);
         if (res != 0) {
             //oldp=p;
-            p.buttonUp = buf[11] & 0x01;
-            p.buttonDown = (buf[11] >> 1) & 0x01;
-            p.buttonLeft = (buf[11] >> 2) & 0x01;
-            p.buttonRight = (buf[11] >> 3) & 0x01;
-            p.buttonStart = (buf[10] >> 4) & 0x01;
-            p.buttonBack = (buf[10] >> 5) & 0x01;
-            p.buttonLS = (buf[11] >> 6) & 0x01;
-            p.buttonRS = (buf[11] >> 7) & 0x01;
+            //p.buttonUp = (buf[11] >> 2) & 0x01;
+            //p.buttonDown = (buf[11] >> 1) & 0x01;
+            //p.buttonLeft = (buf[11] >> 2) & 0x01;
+            //.buttonRight = (buf[11] >> 3) & 0x01;
+            p.buttonStart = (buf[10] >> 6) & 0x01;
+            p.buttonBack = (buf[10] >> 7) & 0x01;
+            p.buttonLS = (buf[11] >> 0) & 0x01;
+            p.buttonRS = (buf[11] >> 1) & 0x01;
 
-            p.buttonLB = buf[10] & 0x01; //第二组按键
-            p.buttonRB = (buf[10] >> 1) & 0x01;
-            p.buttonXBox = (buf[10] >> 2) & 0x01;
-            p.buttonA = (buf[10] >> 4) & 0x01;
-            p.buttonB = (buf[10] >> 5) & 0x01;
-            p.buttonX = (buf[10] >> 6) & 0x01;
-            p.buttonY = (buf[10] >> 7) & 0x01;
+            p.buttonLB = (buf[10] >> 4) & 0x01; //第二组按键
+            p.buttonRB = (buf[10] >> 5) & 0x01;
+            //p.buttonXBox = (buf[10] >> 2) & 0x01;
+            p.buttonA = (buf[10] >> 0) & 0x01;
+            p.buttonB = (buf[10] >> 1) & 0x01;
+            p.buttonX = (buf[10] >> 2) & 0x01;
+            p.buttonY = (buf[10] >> 3) & 0x01;
 
             p.SLValue = buf[8]; //滑杆
             p.SRValue = buf[9];

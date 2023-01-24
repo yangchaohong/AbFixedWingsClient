@@ -10,13 +10,9 @@ void joystick::run()
     while (isRunning)
     {
         short x=xbox->p.LSYValue,y=xbox->p.LSXValue;
-        if(abs(x)<100)
-            x=0;
-        if(abs(y)<100)
-            y=0;
-        pitchNeed+=x*0.0003;
+        pitchNeed+=x*0.001;
         //qDebug()<<"PitchNeed:"<<pitchNeed<<' '<<(int)xbox->p.LSYValue;
-        rollNeed+=y*0.0003;
+        rollNeed+=y*0.001;
         //qDebug()<<"RollNeed:"<<rollNeed<<' '<<(int)xbox->p.LSXValue;
         if(pitchNeed<=-15)
             pitchNeed=-15;
