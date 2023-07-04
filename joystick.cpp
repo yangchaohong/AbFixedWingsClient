@@ -10,6 +10,8 @@ void joystick::run()
     while (isRunning)
     {
         short x=xbox->p.LSYValue,y=xbox->p.LSXValue;
+        x=(int)(x/10)*10;
+        y=(int)(y/10)*10;
         pitchNeed+=x*0.001;
         //qDebug()<<"PitchNeed:"<<pitchNeed<<' '<<(int)xbox->p.LSYValue;
         rollNeed+=y*0.001;

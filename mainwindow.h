@@ -11,12 +11,12 @@
 #include <QTcpServer>
 #include <QTcpSocket>
 #include <bits/stdc++.h>
-#include <opencv2/opencv.hpp>
+//#include <opencv2/opencv.hpp>
 #include "ptr.h"
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
-using namespace cv;
+//using namespace cv;
 class MainWindow : public QMainWindow
 {
     Q_OBJECT

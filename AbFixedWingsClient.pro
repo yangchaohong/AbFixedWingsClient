@@ -41,13 +41,10 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
-
+DISTFILES += \
+    horizon.png
 
 win32: LIBS += -L$$PWD/../hidapi/ -lhidapi
 
-INCLUDEPATH += $$PWD/../hidapi \
-               $$PWD/../opencv/build/include
+INCLUDEPATH += $$PWD/../hidapi
 DEPENDPATH += $$PWD/../hidapi
-
-DISTFILES += \
-    horizon.png
