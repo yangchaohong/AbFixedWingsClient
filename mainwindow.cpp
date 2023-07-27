@@ -28,7 +28,7 @@ void MainWindow::paintEvent(QPaintEvent *)
     //painter.translate(-1300,-250);
 
     QMatrix matrix;
-    matrix.rotate(imageRotate);
+    matrix.rotate(-imageRotate);
     /* 画图操作 */
     horizon=horizon.transformed(matrix);
     painter.drawPixmap(0,0+imageY,500,800,horizon);
