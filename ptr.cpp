@@ -20,7 +20,7 @@ ac:
     if(temp=="start\n")
     {
         qDebug()<<"Start";
-        while(1)
+        while(isRunning==1)
         {
             mSocket->waitForReadyRead();
             temp=mSocket->readLine();

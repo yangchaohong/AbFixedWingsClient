@@ -1,4 +1,5 @@
 #include "xboxthread.h"
+#include <QDebug>
 extern "C" {
 #include <hidapi.h>
 }
@@ -11,9 +12,13 @@ void XboxThread::run() {
     hid_device *handle;
     // Open the device using the VID, PID,
     // and optionally the Serial number.
-    handle = hid_open(0x045e, 0x028e, NULL);
+    struct hid_device_info *devInfo=hid_enumerate(0,0);
+    finddev:
+    handle = hid_open(devInfo->vendor_id,devInfo->product_id,NULL);
     if (handle == NULL) {
-        return;
+        qDebug()<<"Cannot Open Device!";
+        devInfo=devInfo->next;
+        goto finddev;
     }
     hid_set_nonblocking(handle, 1);
     p.SLValue=p.SRValue=p.buttonA=p.buttonB=p.buttonX=p.buttonY=p.LSXValue=p.LSYValue=p.RSXValue=p.RSYValue=p.buttonLB=p.buttonLS=p.buttonRB=p.buttonRS=p.buttonBack=p.buttonStart=0;
@@ -36,14 +41,14 @@ void XboxThread::run() {
             //p.buttonXBox = (buf[10] >> 2) & 0x01;
             p.buttonA = (buf[10] >> 0) & 0x01;
             p.buttonB = (buf[10] >> 1) & 0x01;
-            p.buttonX = (buf[10] >> 2) & 0x01;
-            p.buttonY = (buf[10] >> 3) & 0x01;
+            p.buttonX = (buf[6] >> 3) & 0x01;
+            p.buttonY = (buf[6] >> 4) & 0x01;
 
             p.SLValue = buf[8]; //滑杆
             p.SRValue = buf[9];
 
             p.LSXValue = buf[1]-124;
-            p.LSYValue = buf[3]-132;
+            p.LSYValue = buf[2]-132;
 
             p.RSXValue = buf[5]-128;
             p.RSYValue = buf[7]-126;

@@ -90,9 +90,9 @@ void MainWindow::move()
     pitchNeed=joy->pitchNeed;
     rollNeed=joy->rollNeed;
     if(joy->xbox->p.buttonY)
-        thro+=2;
+        thro+=1;
     if(joy->xbox->p.buttonX)
-        thro-=2;
+        thro-=1;
     if(thro>100)
         thro=100;
     if(thro<0)

@@ -1,6 +1,4 @@
 QT       += core gui
-QT       += serialport
-QT += charts
 QT += network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
@@ -46,5 +44,6 @@ DISTFILES += \
 
 win32: LIBS += -L$$PWD/../hidapi/ -lhidapi
 
-INCLUDEPATH += $$PWD/../hidapi
-DEPENDPATH += $$PWD/../hidapi
+INCLUDEPATH += /usr/include/hidapi
+
+unix:!macx: LIBS += -lhidapi-libusb

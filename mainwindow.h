@@ -2,9 +2,6 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QSerialPort>           //提供访问串口的功能
-#include <QSerialPortInfo>    //提供系统中存在的串口的信息
-#include <QtCharts>
 #include <bits/stdc++.h>
 #include <QUdpSocket>
 #include "xboxthread.h"

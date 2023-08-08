@@ -1,12 +1,12 @@
 #include "joystick.h"
-#include <windows.h>
+#include <sys/wait.h>
 void joystick::run()
 {
     pitchNeed=rollNeed=0;
     xbox->setrun(1);
     //xbox->moveToThread(xbox);
     xbox->start();
-    Sleep(10);
+    usleep(100000);
     while (isRunning)
     {
         short x=xbox->p.LSYValue,y=xbox->p.LSXValue;
@@ -23,7 +23,7 @@ void joystick::run()
         if(rollNeed<=-56)
             rollNeed=-56;
         emit resultReady();
-        Sleep(1);
+        usleep(3000);
     }
     xbox->setrun(0);
     xbox->deleteLater();
