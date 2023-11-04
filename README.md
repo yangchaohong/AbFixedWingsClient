@@ -1,19 +1,36 @@
-# AbFixedWings图传遥控一体化网络无人机项目_客户端
+# Xbox360GamePad_Qt
+this is a qt demo project!
+使用hidapi库编写了一个XBOX360手柄的线程库，可以读取手柄的信号然后进行其他动作
+```
+struct position { //键位定义
 
-AbFixedWings是一套以4G/WiFi等TCP/IP网络实现的固定翼无人机，以实现更好的图传画质和更远的遥控距离。
+    bool buttonA; //按键A
+    bool buttonB; //按键B
+    bool buttonX; //按键X
+    bool buttonY; //按键Y
 
-AbFixedWings需要一台电脑、一台树莓派/芒果派/其他派和一块Arduino（例程适用于STM32F103C8T6）。树莓派作为天空端，Arduino作为飞控，两者用串口通信；电脑作为地面站，以游戏手柄遥控。图传使用TCP协议，遥控使用UDP协议。
+    bool buttonBack;  // back按键
+    bool buttonStart; // start按键
+    bool buttonXBox;  // xbox键
 
-其余的硬件还有MPU6050，舵机，电子调速器，电机，摄像头、Xbox等游戏手柄。
+    bool buttonLB; //按键LB
+    bool buttonRB; //按键RB
 
-AbFixedWings前卫地支持了树莓派船新的LibCamera库。
+    bool buttonUp;    //上
+    bool buttonDown;  //下
+    bool buttonLeft;  //左
+    bool buttonRight; //右
 
-为了简化设计，我们将复刻空客电传飞控的常规法则。
+    bool buttonRS; //右摇杆按键
+    bool buttonLS; //左摇杆按键
 
-天空端：https://github.com/yangchaohong/AbFixedWingsSky
+    unsigned char SRValue; //右滑杆
+    unsigned char SLValue; //左滑杆
 
-飞控端：https://github.com/yangchaohong/AbFixedWingsArduino
-
-构建：使用Qt 5.15构建
-
-目前开发进度：方向舵部分代码开发中
+    char LSXValue; //左摇杆X方向
+    char LSYValue; //左摇杆Y方向
+    char RSXValue; //右摇杆X方向
+    char RSYValue; //右摇杆Y方向
+  };
+```
+<div align=center><img src="https://github.com/WanderROS/Xbox360GamePad_Qt/blob/master/demo.gif?raw=true"/></div>

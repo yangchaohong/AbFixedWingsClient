@@ -9,12 +9,12 @@ void joystick::run()
     Sleep(10);
     while (isRunning)
     {
-        short x=xbox->p.LSYValue,y=xbox->p.LSXValue;
+        short x=xbox->p.LSYValue,y=xbox->p.LSXValue,z=-xbox->p.SRValue+128;
         x=(int)(x/10)*10;
         y=(int)(y/10)*10;
-        pitchNeed+=x*0.001;
+        pitchNeed+=x*0.0006;
         //qDebug()<<"PitchNeed:"<<pitchNeed<<' '<<(int)xbox->p.LSYValue;
-        rollNeed+=y*0.001;
+        rollNeed+=y*0.0006;
         //qDebug()<<"RollNeed:"<<rollNeed<<' '<<(int)xbox->p.LSXValue;
         if(pitchNeed<=-15)
             pitchNeed=-15;
@@ -22,6 +22,7 @@ void joystick::run()
             rollNeed=56;
         if(rollNeed<=-56)
             rollNeed=-56;
+        Yaw=z/3;
         emit resultReady();
         Sleep(1);
     }

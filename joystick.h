@@ -16,6 +16,7 @@ public:
         isRunning = true;
     }
     float pitchNeed,rollNeed,Yaw;
+    short flap;
     XboxThread *xbox;
     void reset();
 protected:

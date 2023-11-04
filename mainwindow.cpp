@@ -31,7 +31,7 @@ void MainWindow::paintEvent(QPaintEvent *)
     matrix.rotate(-imageRotate);
     /* 画图操作 */
     horizon=horizon.transformed(matrix);
-    painter.drawPixmap(0,0+imageY,500,800,horizon);
+    painter.drawPixmap(0,0+imageY*3,500,800,horizon);
 
     //painter.end();
 }
@@ -81,25 +81,41 @@ void MainWindow::tuchuan()
 
 }
 float pitch_old,roll_old;
-int thro_old;
+int thro_old,flap,flp,flap_old;
 void MainWindow::move()
 {
     pitch_old=pitchNeed;
     roll_old=rollNeed;
     thro_old=thro;
+    flap_old=flap;
     pitchNeed=joy->pitchNeed;
     rollNeed=joy->rollNeed;
+    int Yaw=joy->Yaw;
     if(joy->xbox->p.buttonY)
-        thro+=2;
+        thro+=1;
     if(joy->xbox->p.buttonX)
-        thro-=2;
+        thro-=1;
+    if(joy->xbox->p.buttonA)
+        flp++;
+    if(joy->xbox->p.buttonB)
+        flp--;
+    if(flp==5)
+        flap+=5,flp=0;
+    if(flp==-5)
+        flap-=5,flp=0;
     if(thro>100)
         thro=100;
     if(thro<0)
         thro=0;
+    if(flap>40)
+        flap=40;
+    if(flap<0)
+        flap=0;
     ui->verticalSlider->setValue(thro);
     ui->pitch->setText(QString::number(pitchNeed));
     ui->roll->setText(QString::number(rollNeed));
+    ui->label_10->setText(QString::number(Yaw));
+    ui->label_12->setText(QString::number(flap));
     if(connected)
     {
         QByteArray dataGram="Hello";
@@ -125,6 +141,16 @@ void MainWindow::move()
             a='T'+QString::number(thro).toUtf8()+'\n';
             UdpServer->writeDatagram(a,QHostAddress( skyip ),skyport);
         }
+        if(flap!=flap_old)
+        {
+            a='F'+QString::number(flap).toUtf8()+'\n';
+            UdpServer->writeDatagram(a,QHostAddress( skyip ),skyport);
+        }
+        if(Yaw!=0)
+        {
+            a='Y'+QString::number(Yaw).toUtf8()+'\n';
+            UdpServer->writeDatagram(a,QHostAddress( skyip ),skyport);
+        }
     }
 }
 
@@ -138,12 +164,12 @@ void MainWindow::on_pushButton_clicked()
     skyip=ui->lineEdit->text();
     skyport=ui->lineEdit_2->text().toInt();
     QByteArray dataGram="Hello";
-    //UdpServer->bind(1354);
+    UdpServer->bind(1354);
     UdpServer->writeDatagram(dataGram.data(),
                              dataGram.size(),
                              QHostAddress( skyip ),    //udp广播地址
                              skyport);
-    UdpServer->connectToHost(QHostAddress( skyip ),skyport,QIODevice::ReadWrite);
+    //UdpServer->connectToHost(QHostAddress( skyip ),skyport,QIODevice::ReadWrite);
     connected=1;
     /*————————————————
     版权声明：本文为CSDN博主「喝水怪~」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。
