@@ -3,32 +3,28 @@
 void joystick::run()
 {
     pitchNeed=rollNeed=0;
-    xbox->setrun(1);
-    //xbox->moveToThread(xbox);
-    xbox->start();
-    Sleep(10);
+
     while (isRunning)
     {
-        short x=xbox->p.LSYValue,y=xbox->p.LSXValue,z=-xbox->p.SRValue+128;
-        x=(int)(x/10)*10;
-        y=(int)(y/10)*10;
-        pitchNeed+=x*0.0006;
-        //qDebug()<<"PitchNeed:"<<pitchNeed<<' '<<(int)xbox->p.LSYValue;
-        rollNeed+=y*0.0006;
-        //qDebug()<<"RollNeed:"<<rollNeed<<' '<<(int)xbox->p.LSXValue;
-        if(pitchNeed<=-15)
-            pitchNeed=-15;
-        if(rollNeed>=56)
-            rollNeed=56;
-        if(rollNeed<=-56)
-            rollNeed=-56;
-        Yaw=z/3;
-        emit resultReady();
-        Sleep(1);
+        double x=m_gamepad->axisLeftY(),y=m_gamepad->axisLeftX(),z=m_gamepad->buttonR2()-m_gamepad->buttonL2();
+        //if(x!=0.0||y!=0.0||z!=0.0)
+        //{
+            pitchNeed+=x*0.5;
+            //qDebug()<<"PitchNeed:"<<pitchNeed<<' '<<(int)xbox->p.LSYValue;
+            rollNeed+=y*0.5;
+            //qDebug()<<"RollNeed:"<<rollNeed<<' '<<(int)xbox->p.LSXValue;
+            if(pitchNeed<=-15)
+                pitchNeed=-15;
+            if(rollNeed>=56)
+                rollNeed=56;
+            if(rollNeed<=-56)
+                rollNeed=-56;
+            Yaw=z*48;
+            emit resultReady();
+        //}
+        Sleep(10);
     }
-    xbox->setrun(0);
-    xbox->deleteLater();
-    xbox->wait();
+    delete m_gamepad;
 }
 void joystick::reset()
 {

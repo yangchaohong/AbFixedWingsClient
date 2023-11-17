@@ -1,11 +1,11 @@
 #ifndef JOYSTICK_H
 #define JOYSTICK_H
-#include "xboxthread.h"
 #include <QObject>
 #include <QByteArray>
 #include <QDebug>
 #include <QThread>
 #include <QtGui>
+#include <QGamepad>
 class joystick : public QThread
 {
     Q_OBJECT
@@ -17,7 +17,7 @@ public:
     }
     float pitchNeed,rollNeed,Yaw;
     short flap;
-    XboxThread *xbox;
+    QGamepad *m_gamepad;
     void reset();
 protected:
     virtual void run() Q_DECL_OVERRIDE;

@@ -1,7 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "joystick.h"
-//#include <QtGamepad/QGamepad>
+
 using namespace std;
 //QGamepad *m_gamepad;
 
@@ -10,9 +10,10 @@ float imageRotate,imageY;
 int thro;
 QString skyip;
 int skyport,tuchuanport;
-joystick *joy;
 PTR *ptr;
+joystick *joy;
 bool connected;
+bool hhh=0;
 void MainWindow::paintEvent(QPaintEvent *)
 {
     QPixmap horizon("horizon.png");
@@ -43,11 +44,10 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
 
     m_sender=new QUdpSocket(this);
-
     joy=new joystick(this);
-    joy->xbox =new XboxThread(this);
-    joy->isRunning=1;
+    joy->m_gamepad = new QGamepad(0,this);
     joy->start();
+
     connect(joy,SIGNAL(resultReady()),this,SLOT(move()));
 
     QPixmap background("background.png");
@@ -65,13 +65,16 @@ MainWindow::~MainWindow()
     joy->isRunning=0;
     joy->deleteLater();
     joy->wait();
-    ptr->isRunning=0;
-    ptr->mSocket->abort();
-    ptr->deleteLater();
-    ptr->wait();
-    delete ui;
     delete joy;
-    delete ptr;
+    if(hhh)
+    {
+        ptr->isRunning=0;
+        ptr->mSocket->abort();
+        ptr->deleteLater();
+        ptr->wait();
+        delete ptr;
+    }
+    delete ui;
 }
 
 void MainWindow::tuchuan()
@@ -91,18 +94,15 @@ void MainWindow::move()
     pitchNeed=joy->pitchNeed;
     rollNeed=joy->rollNeed;
     int Yaw=joy->Yaw;
-    if(joy->xbox->p.buttonY)
-        thro+=1;
-    if(joy->xbox->p.buttonX)
-        thro-=1;
-    if(joy->xbox->p.buttonA)
-        flp++;
-    if(joy->xbox->p.buttonB)
-        flp--;
-    if(flp==5)
-        flap+=5,flp=0;
-    if(flp==-5)
-        flap-=5,flp=0;
+
+    if(joy->m_gamepad->buttonY())
+        thro++;
+    if(joy->m_gamepad->buttonX())
+        thro--;
+    if(joy->m_gamepad->buttonA())
+        flap++;
+    if(joy->m_gamepad->buttonB())
+        flap--;
     if(thro>100)
         thro=100;
     if(thro<0)
@@ -177,8 +177,6 @@ void MainWindow::on_pushButton_clicked()
 }
 void MainWindow::showPicture(QByteArray picBuffer)
 {
-
-    qDebug()<<"准备图像";
     QByteArray tmp=QByteArray::fromBase64(picBuffer);
     tmp=qUncompress(tmp);
     QBuffer buffer(&tmp);
@@ -196,7 +194,7 @@ void MainWindow::showPicture(QByteArray picBuffer)
 QByteArray recbuf;
 void MainWindow::readyData()
 {
-    qDebug()<<"HAHAHA"<<UdpServer->bytesAvailable();
+    //qDebug()<<"HAHAHA"<<UdpServer->bytesAvailable();
     QByteArray arr;
     arr.resize(UdpServer->bytesAvailable());
     UdpServer->readDatagram(arr.data(),arr.size());
@@ -205,14 +203,14 @@ void MainWindow::readyData()
     {
         string tmp=arr.toStdString();
         imageRotate=stof(tmp.substr(1,tmp.size()-1));
-        qDebug()<<'R'<<imageRotate<<endl;
+        //qDebug()<<'R'<<imageRotate<<endl;
         update();
     }
     if(arr[0]=='P')
     {
         string tmp=arr.toStdString();
         imageY=stof(tmp.substr(1,tmp.size()-1));
-        qDebug()<<'Y'<<imageY<<endl;
+        //qDebug()<<'Y'<<imageY<<endl;
         update();
     }
 
@@ -225,7 +223,7 @@ void MainWindow::on_pushButton_2_clicked()
 
 void MainWindow::on_pushButton_3_clicked()
 {
-
+    hhh=1;
     ptr=new PTR(this);
     ptr->skyip=ui->lineEdit->text();
     ptr->tuchuanport=ui->lineEdit_3->text().toInt();

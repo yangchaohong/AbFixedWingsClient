@@ -1,5 +1,5 @@
 QT       += core gui
-QT       += serialport
+QT       += serialport gamepad
 QT += charts
 QT += network
 
@@ -22,13 +22,11 @@ SOURCES += \
     joystick.cpp \
     main.cpp \
     mainwindow.cpp \
-    ptr.cpp \
-    xboxthread.cpp
+    ptr.cpp
 HEADERS += \
     joystick.h \
     mainwindow.h \
-    ptr.h \
-    xboxthread.h
+    ptr.h
 
 FORMS += \
     mainwindow.ui
@@ -43,8 +41,3 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 DISTFILES += \
     horizon.png
-
-win32: LIBS += -L$$PWD/../hidapi/ -lhidapi
-
-INCLUDEPATH += $$PWD/../hidapi
-DEPENDPATH += $$PWD/../hidapi

@@ -19,7 +19,7 @@ ac:
     QByteArray temp=mSocket->readLine();
     if(temp=="start\n")
     {
-        qDebug()<<"Start";
+        //qDebug()<<"Start";
         while(1)
         {
             mSocket->waitForReadyRead();
@@ -28,7 +28,7 @@ ac:
             //    continue;
             if(temp=="end\n")
             {
-                qDebug()<<"end";
+                //qDebug()<<"end";
                 break;
             }
             picBuffer+=temp;
