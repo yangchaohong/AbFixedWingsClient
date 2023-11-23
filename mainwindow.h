@@ -7,11 +7,11 @@
 #include <QtCharts>
 #include <bits/stdc++.h>
 #include <QUdpSocket>
-#include "xboxthread.h"
 #include <QTcpServer>
 #include <QTcpSocket>
 #include <bits/stdc++.h>
 //#include <opencv2/opencv.hpp>
+#include <QHostInfo>
 #include "ptr.h"
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -37,6 +37,8 @@ private slots:
 
     void on_pushButton_3_clicked();
     void showPicture(QByteArray picBuffer);
+
+    void lookUpHostInfo(const QHostInfo &host);
 
 private:
     Ui::MainWindow *ui;

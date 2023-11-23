@@ -8,7 +8,7 @@ using namespace std;
 float pitchNeed,rollNeed,Yaw;
 float imageRotate,imageY;
 int thro;
-QString skyip;
+QHostAddress skyip;
 int skyport,tuchuanport;
 PTR *ptr;
 joystick *joy;
@@ -31,8 +31,9 @@ void MainWindow::paintEvent(QPaintEvent *)
     QMatrix matrix;
     matrix.rotate(-imageRotate);
     /* 画图操作 */
+    int zoom=abs(imageRotate)*40;
     horizon=horizon.transformed(matrix);
-    painter.drawPixmap(0,0+imageY*3,500,800,horizon);
+    painter.drawPixmap(0-zoom/2,0+imageY*3-zoom/2,500+zoom,800+zoom,horizon);
 
     //painter.end();
 }
@@ -121,7 +122,7 @@ void MainWindow::move()
         QByteArray dataGram="Hello";
         UdpServer->writeDatagram(dataGram.data(),
                                  dataGram.size(),
-                                 QHostAddress( skyip ),    //udp广播地址
+                                 skyip,    //udp广播地址
                                  skyport);
 
         QByteArray a;
@@ -129,27 +130,27 @@ void MainWindow::move()
         if(pitchNeed!=pitch_old)
         {
             a='P'+QString::number(pitchNeed).toUtf8()+'\n';
-            UdpServer->writeDatagram(a,QHostAddress( skyip ),skyport);
+            UdpServer->writeDatagram(a,skyip,skyport);
         }
         if(rollNeed!=roll_old)
         {
             a='R'+QString::number(rollNeed).toUtf8()+'\n';
-            UdpServer->writeDatagram(a,QHostAddress( skyip ),skyport);
+            UdpServer->writeDatagram(a,skyip,skyport);
         }
         if(thro!=thro_old)
         {
             a='T'+QString::number(thro).toUtf8()+'\n';
-            UdpServer->writeDatagram(a,QHostAddress( skyip ),skyport);
+            UdpServer->writeDatagram(a,skyip,skyport);
         }
         if(flap!=flap_old)
         {
             a='F'+QString::number(flap).toUtf8()+'\n';
-            UdpServer->writeDatagram(a,QHostAddress( skyip ),skyport);
+            UdpServer->writeDatagram(a,skyip,skyport);
         }
         if(Yaw!=0)
         {
             a='Y'+QString::number(Yaw).toUtf8()+'\n';
-            UdpServer->writeDatagram(a,QHostAddress( skyip ),skyport);
+            UdpServer->writeDatagram(a,skyip,skyport);
         }
     }
 }
@@ -161,13 +162,19 @@ void MainWindow::on_MainWindow_destroyed()
 
 void MainWindow::on_pushButton_clicked()
 {
-    skyip=ui->lineEdit->text();
+    QString s=ui->lineEdit->text();
+    QHostInfo::lookupHost(s,this,SLOT(lookUpHostInfo(QHostInfo)));
+}
+
+void MainWindow::lookUpHostInfo(const QHostInfo &host)
+{
+    QList<QHostAddress> addList=host.addresses();
+    skyip=addList.at(0);
     skyport=ui->lineEdit_2->text().toInt();
     QByteArray dataGram="Hello";
-    UdpServer->bind(1354);
     UdpServer->writeDatagram(dataGram.data(),
                              dataGram.size(),
-                             QHostAddress( skyip ),    //udp广播地址
+                             skyip,    //udp广播地址
                              skyport);
     //UdpServer->connectToHost(QHostAddress( skyip ),skyport,QIODevice::ReadWrite);
     connected=1;
@@ -175,6 +182,7 @@ void MainWindow::on_pushButton_clicked()
     版权声明：本文为CSDN博主「喝水怪~」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。
     原文链接：https://blog.csdn.net/qq_43686329/article/details/120352026*/
 }
+
 void MainWindow::showPicture(QByteArray picBuffer)
 {
     QByteArray tmp=QByteArray::fromBase64(picBuffer);
