@@ -1,5 +1,10 @@
 #include "joystick.h"
-#include <windows.h>
+#ifdef _WIN32
+    #include <windows.h>
+#elif __linux__
+    #include <unistd.h>
+    #define Sleep sleep
+#endif
 void joystick::run()
 {
     pitchNeed=rollNeed=0;
