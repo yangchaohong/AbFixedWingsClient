@@ -5,7 +5,8 @@
 using namespace std;
 //QGamepad *m_gamepad;
 
-float pitchNeed,rollNeed,Yaw;
+float pitchNeed,rollNeed;
+int Yaw;
 float imageRotate,imageY;
 int thro;
 QHostAddress skyip;
@@ -45,8 +46,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
 
     m_sender=new QUdpSocket(this);
+
     joy=new joystick(this);
-    joy->m_gamepad = new QGamepad(0,this);
     joy->start();
 
     connect(joy,SIGNAL(resultReady()),this,SLOT(move()));
@@ -70,7 +71,6 @@ MainWindow::~MainWindow()
     if(hhh)
     {
         ptr->isRunning=0;
-        ptr->mSocket->abort();
         ptr->deleteLater();
         ptr->wait();
         delete ptr;
@@ -85,24 +85,25 @@ void MainWindow::tuchuan()
 
 }
 float pitch_old,roll_old;
-int thro_old,flap,flp,flap_old;
+int thro_old,flap,flp,flap_old,yaw_old;
 void MainWindow::move()
 {
+    yaw_old=Yaw;
     pitch_old=pitchNeed;
     roll_old=rollNeed;
     thro_old=thro;
     flap_old=flap;
     pitchNeed=joy->pitchNeed;
     rollNeed=joy->rollNeed;
-    int Yaw=joy->Yaw;
+    Yaw=joy->Yaw;
 
-    if(joy->m_gamepad->buttonY())
+    if(joy->by)
         thro++;
-    if(joy->m_gamepad->buttonX())
+    if(joy->bx)
         thro--;
-    if(joy->m_gamepad->buttonA())
+    if(joy->ba)
         flap++;
-    if(joy->m_gamepad->buttonB())
+    if(joy->bb)
         flap--;
     if(thro>100)
         thro=100;
@@ -147,7 +148,7 @@ void MainWindow::move()
             a='F'+QString::number(flap).toUtf8()+'\n';
             UdpServer->writeDatagram(a,skyip,skyport);
         }
-        if(Yaw!=0)
+        if(Yaw!=yaw_old)
         {
             a='Y'+QString::number(Yaw).toUtf8()+'\n';
             UdpServer->writeDatagram(a,skyip,skyport);
@@ -162,15 +163,20 @@ void MainWindow::on_MainWindow_destroyed()
 
 void MainWindow::on_pushButton_clicked()
 {
-    QString s=ui->lineEdit->text();
-    QHostInfo::lookupHost(s,this,SLOT(lookUpHostInfo(QHostInfo)));
+    QString s=ui->lineEdit_2->text();
+    int pos=s.lastIndexOf(':');
+    QString add=s.mid(0,pos);
+    QHostInfo::lookupHost(add,this,SLOT(lookUpHostInfo(QHostInfo)));
 }
 
 void MainWindow::lookUpHostInfo(const QHostInfo &host)
 {
     QList<QHostAddress> addList=host.addresses();
     skyip=addList.at(0);
-    skyport=ui->lineEdit_2->text().toInt();
+
+    QString s=ui->lineEdit_2->text();
+    int pos=s.lastIndexOf(':');
+    skyport=s.mid(pos+1,s.length()-1).toInt();
     QByteArray dataGram="Hello";
     UdpServer->writeDatagram(dataGram.data(),
                              dataGram.size(),
@@ -226,18 +232,41 @@ void MainWindow::readyData()
 
 void MainWindow::on_pushButton_2_clicked()
 {
-    joy->reset();
+    joy->isRunning=0;
+    joy->deleteLater();
+    joy->wait();
+    delete joy;
+    joy=new joystick(this);
+    joy->start();
+    connect(joy,SIGNAL(resultReady()),this,SLOT(move()));
 }
 
 void MainWindow::on_pushButton_3_clicked()
 {
+    QString s=ui->lineEdit_3->text();
+    int pos=s.lastIndexOf(':');
+    QString add=s.mid(0,pos);
+
+    QHostInfo::lookupHost(add,this,SLOT(lookUpHostInfo_2(QHostInfo)));
+}
+
+void MainWindow::lookUpHostInfo_2(const QHostInfo &host)
+{
+    qDebug()<<"hhh";
+    if(hhh)
+    {
+        ptr->isRunning=0;
+        ptr->deleteLater();
+        ptr->wait();
+        delete ptr;
+    }
     hhh=1;
     ptr=new PTR(this);
-    ptr->skyip=ui->lineEdit->text();
-    ptr->tuchuanport=ui->lineEdit_3->text().toInt();
+    QList<QHostAddress> addList=host.addresses();
+    ptr->tuchuanip=addList.at(0);
+    QString s=ui->lineEdit_3->text();
+    int pos=s.lastIndexOf(':');
+    ptr->tuchuanport=s.mid(pos+1,s.length()-1).toInt();
     connect(ptr,&PTR::picture,this,&MainWindow::showPicture);
-    //connect(ptr->mSocket,&QTcpSocket::readyRead,ptr,&PTR::readyData);
     ptr->start();
-    //QByteArray dataGram="Hello111\n";
-    //ptr->mSocket->write(dataGram.data(),dataGram.size());
 }

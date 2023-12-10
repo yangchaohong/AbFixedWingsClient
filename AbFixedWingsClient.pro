@@ -1,6 +1,6 @@
+include ($$PWD/openJoystick/openJoystick.pri)
+
 QT       += core gui
-QT       += serialport gamepad
-QT += charts
 QT += network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets

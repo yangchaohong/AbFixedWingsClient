@@ -5,7 +5,6 @@
 #include <QDebug>
 #include <QThread>
 #include <QtGui>
-#include <QGamepad>
 class joystick : public QThread
 {
     Q_OBJECT
@@ -17,8 +16,8 @@ public:
     }
     float pitchNeed,rollNeed,Yaw;
     short flap;
-    QGamepad *m_gamepad;
     void reset();
+    bool bx,by,ba,bb;
 protected:
     virtual void run() Q_DECL_OVERRIDE;
 signals:

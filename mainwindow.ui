@@ -40,21 +40,11 @@
      <string>TextLabel</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit">
-    <property name="geometry">
-     <rect>
-      <x>1090</x>
-      <y>630</y>
-      <width>133</width>
-      <height>20</height>
-     </rect>
-    </property>
-   </widget>
    <widget class="QPushButton" name="pushButton">
     <property name="geometry">
      <rect>
-      <x>1244</x>
-      <y>630</y>
+      <x>1220</x>
+      <y>660</y>
       <width>91</width>
       <height>23</height>
      </rect>
@@ -73,30 +63,17 @@
      </rect>
     </property>
    </widget>
-   <widget class="QLabel" name="label_3">
-    <property name="geometry">
-     <rect>
-      <x>1010</x>
-      <y>630</y>
-      <width>71</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Sky端IP地址</string>
-    </property>
-   </widget>
    <widget class="QLabel" name="label_4">
     <property name="geometry">
      <rect>
-      <x>1010</x>
-      <y>670</y>
+      <x>1030</x>
+      <y>660</y>
       <width>54</width>
       <height>12</height>
      </rect>
     </property>
     <property name="text">
-     <string>遥控端口</string>
+     <string>遥控地址</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_5">
@@ -174,7 +151,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>清零</string>
+     <string>重置手柄</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="lineEdit_3">
@@ -190,21 +167,21 @@
    <widget class="QLabel" name="label_8">
     <property name="geometry">
      <rect>
-      <x>1010</x>
-      <y>700</y>
+      <x>1030</x>
+      <y>690</y>
       <width>54</width>
       <height>12</height>
      </rect>
     </property>
     <property name="text">
-     <string>图传端口</string>
+     <string>图传地址</string>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButton_3">
     <property name="geometry">
      <rect>
-      <x>1250</x>
-      <y>670</y>
+      <x>1230</x>
+      <y>690</y>
       <width>75</width>
       <height>23</height>
      </rect>
@@ -285,10 +262,8 @@
     </property>
    </widget>
    <zorder>label_2</zorder>
-   <zorder>lineEdit</zorder>
    <zorder>pushButton</zorder>
    <zorder>lineEdit_2</zorder>
-   <zorder>label_3</zorder>
    <zorder>label_4</zorder>
    <zorder>label_5</zorder>
    <zorder>label_6</zorder>

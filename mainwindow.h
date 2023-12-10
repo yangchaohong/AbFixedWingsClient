@@ -2,15 +2,11 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QSerialPort>           //提供访问串口的功能
-#include <QSerialPortInfo>    //提供系统中存在的串口的信息
-#include <QtCharts>
 #include <bits/stdc++.h>
 #include <QUdpSocket>
 #include <QTcpServer>
 #include <QTcpSocket>
 #include <bits/stdc++.h>
-//#include <opencv2/opencv.hpp>
 #include <QHostInfo>
 #include "ptr.h"
 QT_BEGIN_NAMESPACE
@@ -39,6 +35,7 @@ private slots:
     void showPicture(QByteArray picBuffer);
 
     void lookUpHostInfo(const QHostInfo &host);
+    void lookUpHostInfo_2(const QHostInfo &host);
 
 private:
     Ui::MainWindow *ui;
