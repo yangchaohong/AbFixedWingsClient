@@ -1,0 +1,3 @@
+[submodule "openJoystick"]
+	path = openJoystick
+	url = https://github.com/yangchaohong/openJoystick
