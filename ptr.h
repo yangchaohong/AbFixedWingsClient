@@ -21,7 +21,7 @@ public:
     PTR();
     bool isRunning;
     QTcpSocket *mSocket;
-    QString skyip;
+    QHostAddress tuchuanip;
     int tuchuanport;
 protected:
     virtual void run() Q_DECL_OVERRIDE;
