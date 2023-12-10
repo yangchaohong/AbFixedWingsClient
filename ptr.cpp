@@ -9,7 +9,7 @@ QByteArray picBuffer;
 void PTR::run()
 {
     mSocket=new QTcpSocket(this);
-    mSocket->connectToHost(QHostAddress( skyip ),tuchuanport);
+    mSocket->connectToHost(tuchuanip,tuchuanport);
     mSocket->waitForConnected();
     //connect(mSocket,&QTcpSocket::readyRead,this,&PTR::readyData);
     mSocket->setReadBufferSize(1048576);
