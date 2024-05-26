@@ -32,7 +32,9 @@ void MainWindow::paintEvent(QPaintEvent *)
     QMatrix matrix;
     matrix.rotate(-imageRotate);
     /* 画图操作 */
-    int zoom=abs(imageRotate)*40;
+    int zoom=pow(abs(imageRotate),2)*3/2;
+    if(abs(imageRotate)>90)
+        zoom=pow(abs(imageRotate)-90,2)*3/2;
     horizon=horizon.transformed(matrix);
     painter.drawPixmap(0-zoom/2,0+imageY*3-zoom/2,500+zoom,800+zoom,horizon);
 
@@ -89,8 +91,8 @@ int thro_old,flap,flp,flap_old,yaw_old;
 void MainWindow::move()
 {
     yaw_old=Yaw;
-    pitch_old=pitchNeed;
-    roll_old=rollNeed;
+
+
     thro_old=thro;
     flap_old=flap;
     pitchNeed=joy->pitchNeed;
@@ -130,11 +132,13 @@ void MainWindow::move()
 
         if(pitchNeed!=pitch_old)
         {
+            pitch_old=pitchNeed;
             a='P'+QString::number(pitchNeed).toUtf8()+'\n';
             UdpServer->writeDatagram(a,skyip,skyport);
         }
         if(rollNeed!=roll_old)
         {
+            roll_old=rollNeed;
             a='R'+QString::number(rollNeed).toUtf8()+'\n';
             UdpServer->writeDatagram(a,skyip,skyport);
         }
@@ -217,14 +221,14 @@ void MainWindow::readyData()
     {
         string tmp=arr.toStdString();
         imageRotate=stof(tmp.substr(1,tmp.size()-1));
-        //qDebug()<<'R'<<imageRotate<<endl;
+        qDebug()<<'R'<<imageRotate<<endl;
         update();
     }
     if(arr[0]=='P')
     {
         string tmp=arr.toStdString();
         imageY=stof(tmp.substr(1,tmp.size()-1));
-        //qDebug()<<'Y'<<imageY<<endl;
+        qDebug()<<'Y'<<imageY<<endl;
         update();
     }
 
